@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Custom files and folders
+.vscode/
+dcache/
+supported_devices.csv
+screenshots/
+videos/
+*.png
+adbepy.config
