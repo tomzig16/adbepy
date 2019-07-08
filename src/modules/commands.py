@@ -123,7 +123,7 @@ def PrintDevices(args):
     for device in connectedDevices:
         deviceInfo.append(FormatEssentialDeviceInfo(device, args.battery))
     
-    tableLabels = ["Asset tag", "Device name", "OS version",
+    tableLabels = ["Device name", "OS version",
                     "CPU SoC", "GPU renderer", "GLES version", "Serial number"]
     if args.battery:
         tableLabels.append("Bat. %")
@@ -135,7 +135,7 @@ def PrintDevicesInExcelFormat(args):
     if connectedDevices == None:
         return
     else:
-        deviceInfo = "Asset tag\tDevice name\tOS version\tCPU SoC\tGPU renderer\tGLES version\tSerial number"
+        deviceInfo = "Device name\tOS version\tCPU SoC\tGPU renderer\tGLES version\tSerial number"
         if args.battery:
             deviceInfo += "\tBat. level\tBat. temp."
         deviceInfo += "\n"
@@ -333,8 +333,6 @@ def CopyDeviceInfo(args):
     counter = 0
     for device in connectedDevices:
         devdata = device.GetFullDeviceData()
-        if mode != CopyDeviceInfoModes.minimal:
-            stringForClipboard += devdata["asset_tag"] + separator
         stringForClipboard += devdata["manufa"] + " " + devdata["market_name"] + " (" + devdata["model_code"] + ")" + separator
         if not args.use_tabs: stringForClipboard += "Android "
         stringForClipboard += devdata["os"]
