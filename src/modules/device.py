@@ -231,7 +231,7 @@ class DeviceData:
     def __init__(self, deviceID, isIndepthInfo, isForTests=False, testDictData={}):
         """
         Constructor requires deviceID and a boolean if it should go for indepth information
-        If isIndepthInfo is true - adub will run several shell commands and gather more information about the device itself
+        If isIndepthInfo is true - adbepy will run several shell commands and gather more information about the device itself
         """
         if isForTests:
             self.__LoadTestData(testDictData)
