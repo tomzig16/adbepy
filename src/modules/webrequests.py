@@ -5,8 +5,6 @@ import urllib.request
 import json
 from modules.configs import ConfigDataFields, GetFieldData
 
-TryConnectingToSnipeIt = True
-
 def UpdateSupportedDevices(args):
     url = "http://storage.googleapis.com/play_public/supported_devices.csv"
     resPath = "../res/"
