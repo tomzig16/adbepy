@@ -1,8 +1,8 @@
-# Welcome to ADBEpy repository. 
+# Welcome to ADB Extension repository. 
 
-## What is ADBEpy
+## What is ADBE
 
-ADBEpy is simply a tool which helps in development and testing with lots of devices. With this tool you can run different commands on one, specific group or all devices at once.
+ADB Extension or ADBEpy is simply a tool which helps in development and testing with lots of devices. With this tool you can run different commands on one, specific group or all devices at once.
 
 ## Prerequisites and installation
 
@@ -10,7 +10,7 @@ In order to successfully run ADBEpy you must have [Python 3](https://www.python.
 
 You will need [colorama](https://pypi.org/project/colorama/) (for colorful device output) and [pyperclip](https://pypi.org/project/pyperclip/) (in order to copy device data to clipboard). Feel free to install these packages manually, or you can simply install from `pipreq.txt` given requirements:
 ```
-pip install -r ./pipreq.txt
+pip install -r ./requirements.txt
 ```
 After installing these modules you are ready to run `src/adbe.py` and work, but we made things simplier and added small wrappers which will let you call ADBE from anywhere, by simply writing `adbe [command]`. You can ignore further instructions, but if you want to avoid typing all the paths or aliases yourself follow the steps below (under your OS)
 
@@ -67,8 +67,3 @@ Here's a quick cheatsheet of available commands and their description:
 | open-dir| opens adbe's directory | opendir |
 
 Each command also accepts `-h` parameter which tells about the command in more in depth info
-
-<hr />
-
-##### If you have any questions regarding ADBEpy feel free to contact me (Tomas - tzigmantavicius@gmail.com) or create an issue/discussion.
-
