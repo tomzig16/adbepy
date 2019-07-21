@@ -6,7 +6,7 @@ import pyperclip
 import threading
 from modules.device import DeviceData
 from modules.configs import ConfigDataFields, GetFieldData
-from modules.deviceInfoFormat import FormatEssentialDeviceInfo, FormatEssentialDeviceInfoInExcelFormat, PrintInfoTable
+from modules.deviceInfoFormat import FormatEssentialDeviceInfo, FormatEssentialDeviceInfoInExcelFormat, PrintInfoTable, PrintError
 from modules.deviceCacher import DeleteCachedDevice, DeleteCacheDir
 
 
@@ -31,27 +31,33 @@ def GetConnectedDevices(isFullInfo):
     Gets all connected devices. if isFullInfo is set to True it loads all additional device info as well.
     This is optional because sometimes you may not want to do that (for example when removing apps from device)
     """
-    proc = Popen(["adb", "devices"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = proc.communicate(input=None, timeout=None)
-    daemonStartMessage = "daemon not running; starting now"
-    if(err and daemonStartMessage not in err.decode("ascii")):
-        print(err)
-        return []
-    devices = []
-    unauthorized = False
-    for line in (output.decode("ascii")).splitlines():
-        if "\tdevice" in line:
-            devData = DeviceData(line.split('\t')[0], isFullInfo)
-            devices.append(devData)
-        if "\tunauthorized" in line:
-            print("Device " + line.split('\t')[0] + " unauthorized")
-            unauthorized = True
-    if len(devices) == 0:
-        if not unauthorized:
-            print("There are no devices connected")
+    try:
+        proc = Popen(["adb", "devices"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = proc.communicate(input=None, timeout=None)
+        daemonStartMessage = "daemon not running; starting now"
+        if(err and daemonStartMessage not in err.decode("ascii")):
+            print(err)
+            return []
+        devices = []
+        unauthorized = False
+        for line in (output.decode("ascii")).splitlines():
+            if "\tdevice" in line:
+                devData = DeviceData(line.split('\t')[0], isFullInfo)
+                devices.append(devData)
+            if "\tunauthorized" in line:
+                print("Device " + line.split('\t')[0] + " unauthorized")
+                unauthorized = True
+        if len(devices) == 0:
+            if not unauthorized:
+                print("There are no devices connected")
+                return None
             return None
+        return devices
+    except FileNotFoundError:
+        PrintError("adb command was not found.")
+        PrintError("Make sure that Android SDK is installed correctly and adb is added to the PATH environmental variable.")
+        PrintError("ADB Extension is a simply an extenion and it can not run without adb.")
         return None
-    return devices
 
 def GetAPKDumpBadging(apkPath):
     """

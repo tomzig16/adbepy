@@ -2,25 +2,31 @@ from subprocess import Popen, PIPE
 import re
 import os
 from platform import system
+from modules.deviceInfoFormat import PrintError
 
 resFolder = os.path.join(os.path.dirname(__file__), "../res/")
 configFileName = "adbepy.config"
 configFilePath = os.path.join(resFolder, configFileName)
 
 def GetDefaultSDKPath():
-    proc = Popen(["adb"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = proc.communicate(input=None, timeout=None)
-    if err.decode("UTF-8"):
-        # if adb is not added to PATH env variables
-        userPath = os.path.expanduser("~")
-        pathToSDK = "Library/Android/sdk"
-        if system() == "Windows":
-            pathToSDK = "AppData\\Local\\Android\\Sdk"
-        return os.path.join(userPath, pathToSDK)
-    else:
-        matchObj = re.search(r"Installed as (.+(?=\n))", output.decode("ascii"), flags=0)
-        return os.path.abspath(os.path.join(matchObj.group(1), "../../"))
-        
+    try:
+        proc = Popen(["adb"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = proc.communicate(input=None, timeout=None)
+        if err.decode("UTF-8"): # TODO test if this is needed
+            # if adb is not added to PATH env variables
+            userPath = os.path.expanduser("~")
+            pathToSDK = "Library/Android/sdk"
+            if system() == "Windows":
+                pathToSDK = "AppData\\Local\\Android\\Sdk"
+            return os.path.join(userPath, pathToSDK)
+        else:
+            matchObj = re.search(r"Installed as (.+(?=\n))", output.decode("ascii"), flags=0)
+            return os.path.abspath(os.path.join(matchObj.group(1), "../../"))
+    except FileNotFoundError:
+        PrintError("adb command was not found.")
+        PrintError("Make sure that Android SDK is installed correctly and adb is added to the PATH environmental variable.")
+        PrintError("ADB Extension is a simply an extenion and it can not run without adb.")
+        return ""      
 
 
 class ConfigDataFields:
